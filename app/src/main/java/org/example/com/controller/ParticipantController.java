@@ -1,8 +1,7 @@
 package org.example.com.controller;
 
-import org.example.com.model.Participant;
+import org.example.com.dto.ParticipantDTO;
 import org.example.com.service.ParticipantService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,29 +12,26 @@ import java.util.UUID;
 @RequestMapping("/api/participants")
 public class ParticipantController {
 
-    @Autowired
-    private ParticipantService participantService;
+    private final ParticipantService participantService;
+
+    public ParticipantController(ParticipantService participantService) {
+        this.participantService = participantService;
+    }
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<Participant> getParticipant(@PathVariable UUID uuid) {
-        Optional<Participant> participant = participantService.getParticipantByUuid(uuid);
-        if (participant.isPresent()) {
-            UUID newUuid = participantService.regenerateUuid(participant.get());
-            return ResponseEntity.ok(participant.get());
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Optional<ParticipantDTO>> getParticipant(@PathVariable UUID uuid) {
+        Optional<ParticipantDTO> participantDTO = participantService.getParticipantByUuid(uuid);
+        return ResponseEntity.ok(participantDTO);
     }
 
     @PostMapping
-    public ResponseEntity<Participant> addParticipant(@RequestBody Participant participant) {
-        Participant savedParticipant = participantService.addOrUpdateParticipant(participant);
-        return ResponseEntity.ok(savedParticipant);
+    public ResponseEntity<ParticipantDTO> addParticipant(@RequestBody ParticipantDTO participantDTO) {
+        ParticipantDTO savedParticipantDTO = participantService.save(participantDTO);
+        return ResponseEntity.ok(savedParticipantDTO);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteParticipant(@PathVariable Long id) {
-
         participantService.deleteParticipant(id);
         return ResponseEntity.noContent().build();
     }

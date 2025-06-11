@@ -6,11 +6,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Entity
 @Table(name = "participants")
+@Getter
+@Setter
+@NoArgsConstructor
 public class Participant {
 
     @Id
@@ -24,50 +31,15 @@ public class Participant {
     private String firstName;
 
     @Column(name = "birth_date", nullable = false)
-    private java.sql.Date birthDate;
+    private LocalDate birthDate;
 
     @Column(name = "uuid", nullable = false, unique = true)
     private UUID uuid;
 
-    public Participant() {
-        this.uuid = UUID.randomUUID();
-    }
-
-    public Long getId() {
-        return id;
-    }
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-
-    public String getLastName() {
-        return lastName;
-    }
-    public void setLastName(String lastName) {
+    public Participant(Long id, String lastName, String firstName, LocalDate birthDate, UUID uuid) {
         this.lastName = lastName;
-    }
-
-
-    public String getFirstName() {
-        return firstName;
-    }
-    public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-
-    public java.sql.Date getBirthDate() {
-        return birthDate;
-    }
-    public void setBirthDate(java.sql.Date birthDate) {
         this.birthDate = birthDate;
-    }
-
-    public UUID getUuid() {
-        return uuid;
-    }
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
+        this.uuid = UUID.randomUUID();
     }
 }

@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/Club of participants
+    username: postgres
+    password: Lovalova121206!
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true

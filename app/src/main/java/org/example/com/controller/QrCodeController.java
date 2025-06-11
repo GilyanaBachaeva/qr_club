@@ -1,6 +1,6 @@
 package org.example.com.controller;
 
-import org.example.com.model.Participant;
+import org.example.com.dto.ParticipantDTO;
 import org.example.com.service.ParticipantService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -18,15 +18,12 @@ public class QrCodeController {
 
     @GetMapping("/{uuid}")
     public ResponseEntity<String> checkQrCode(@PathVariable UUID uuid) {
-        Optional<Participant> participant = participantService.getParticipantByUuid(uuid);
-        if (participant.isPresent()) {
-            // Генерация нового UUID
-            UUID newUuid = participantService.regenerateUuid(participant.get());
-            return ResponseEntity.ok("Участник найден: " + participant.get().getFirstName() + " " + participant.get().getLastName() +
-                    ". Новый UUID: " + newUuid);
-        } else {
-            return ResponseEntity.status(404).body("Участник не найден.");
-        }
+
+        Optional<ParticipantDTO> participant = participantService.getParticipantByUuid(uuid);
+
+        String responseMessage = String.format("Участник найден: %s %s.",
+                participant.get().getFirstName(), participant.get().getLastName());
+
+        return ResponseEntity.ok(responseMessage);
     }
 }
-
