@@ -6,6 +6,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,7 +19,8 @@ import java.util.UUID;
 @Getter
 @Setter
 @NoArgsConstructor
-public class Participant {
+@AllArgsConstructor
+public class ParticipantEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +37,4 @@ public class Participant {
 
     @Column(name = "uuid", nullable = false, unique = true)
     private UUID uuid;
-
-    public Participant(Long id, String lastName, String firstName, LocalDate birthDate, UUID uuid) {
-        this.lastName = lastName;
-        this.firstName = firstName;
-        this.birthDate = birthDate;
-        this.uuid = UUID.randomUUID();
-    }
 }
