@@ -64,11 +64,8 @@ public class ParticipantService {
         if (participantUuidEntity == null) {
             throw new IllegalArgumentException("ParticipantUuidEntity cannot be null");
         }
-        UUID newUuid;
-        do {
-            newUuid = UUID.randomUUID();
-        } while (participantUuidRepository.existsByUuid(newUuid));
 
+        UUID newUuid = UUID.randomUUID();
         participantUuidEntity.setUuid(newUuid);
         participantUuidRepository.save(participantUuidEntity);
         return newUuid;
