@@ -17,4 +17,19 @@ public class ParticipantDTO {
     private String firstName;
     private LocalDate birthDate;
     private UUID uuid;
+
+    public ParticipantDTO(Long id, String lastName, String firstName, LocalDate birthDate) {
+        this.id = id;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.birthDate = birthDate;
+        this.uuid = UUID.randomUUID();
+    }
+
+    public ParticipantDTO(String lastName, String firstName, LocalDate birthDate) {
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.birthDate = birthDate;
+        this.uuid = UUID.randomUUID();
+    }
 }

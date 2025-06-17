@@ -5,53 +5,72 @@ import org.example.com.dto.ParticipantDTO;
 import org.example.com.exception.ParticipantNotFoundException;
 import org.example.com.mapper.ParticipantMapper;
 import org.example.com.model.ParticipantEntity;
+import org.example.com.model.ParticipantUuidEntity;
 import org.example.com.repository.ParticipantRepository;
+import org.example.com.repository.ParticipantUuidRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class ParticipantService {
 
     private final ParticipantRepository participantRepository;
+    private final ParticipantUuidRepository participantUuidRepository;
     private final ParticipantMapper participantMapper;
 
-    public Optional<ParticipantDTO> getParticipantByUuid(UUID uuid) {
-        Optional<ParticipantEntity> participant = participantRepository.findByUuid(uuid);
-        return participant.map(participantMapper::toDTO)
-
-                .or(() -> {
-                    throw new ParticipantNotFoundException("Participant not found with UUID: " + uuid);
-                });
+    public ParticipantDTO getParticipantByUuid(UUID uuid) {
+        ParticipantUuidEntity participantUuidEntity = participantUuidRepository.findByUuid(uuid);
+        if (participantUuidEntity == null) {
+            throw new ParticipantNotFoundException("Participant not found with UUID: " + uuid);
+        }
+        ParticipantEntity participantEntity = participantUuidEntity.getParticipant();
+        regenerateUuid(participantUuidEntity);
+        return participantMapper.toDTO(participantEntity);
     }
 
-    public ParticipantDTO checkQrCode(UUID uuid) {
-        ParticipantEntity participantEntity = participantRepository.findByUuid(uuid)
-                .orElseThrow(() -> new ParticipantNotFoundException("Participant not found with UUID: " + uuid));
+    public ParticipantUuidEntity checkQrCode(UUID uuid) {
+        ParticipantUuidEntity participantUuidEntity = participantUuidRepository.findByUuid(uuid);
+        if (participantUuidEntity == null) {
+            throw new ParticipantNotFoundException("Participant not found with UUID: " + uuid);
+        }
 
-        UUID newUuid = UUID.randomUUID();
-        participantEntity.setUuid(newUuid);
-        participantRepository.save(participantEntity);
-
-        return participantMapper.toDTO(participantEntity);
+        regenerateUuid(participantUuidEntity);
+        return participantUuidEntity;
     }
 
     public ParticipantDTO save(ParticipantDTO participantDTO) {
         ParticipantEntity participantEntity = participantMapper.toEntity(participantDTO);
         ParticipantEntity savedParticipantEntity = participantRepository.save(participantEntity);
-        return participantMapper.toDTO(savedParticipantEntity);
+        ParticipantUuidEntity participantUuidEntity = new ParticipantUuidEntity();
+        participantUuidEntity.setUuid(UUID.randomUUID());
+        participantUuidEntity.setParticipant(savedParticipantEntity);
+        participantUuidRepository.save(participantUuidEntity);
+        final var dto = participantMapper.toDTO(savedParticipantEntity);
+        return dto;
     }
 
     public void deleteParticipant(Long id) {
+        if (!participantRepository.existsById(id)) {
+            throw new ParticipantNotFoundException("Participant not found with ID: " + id);
+        }
         participantRepository.deleteById(id);
     }
 
-    public UUID regenerateUuid(ParticipantEntity participantEntity) {
-        UUID newUuid = UUID.randomUUID();
-        participantEntity.setUuid(newUuid);
-        participantRepository.save(participantEntity);
+    public UUID regenerateUuid(ParticipantUuidEntity participantUuidEntity) {
+        if (participantUuidEntity == null) {
+            throw new IllegalArgumentException("ParticipantUuidEntity cannot be null");
+        }
+        UUID newUuid;
+        do {
+            newUuid = UUID.randomUUID();
+        } while (participantUuidRepository.existsByUuid(newUuid));
+
+        participantUuidEntity.setUuid(newUuid);
+        participantUuidRepository.save(participantUuidEntity);
         return newUuid;
     }
 }

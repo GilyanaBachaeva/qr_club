@@ -18,9 +18,8 @@ public class ParticipantController {
 
     @GetMapping("/{uuid}")
     public ResponseEntity<ParticipantDTO> getParticipant(@PathVariable UUID uuid) {
-        return participantService.getParticipantByUuid(uuid)
-                .map(ResponseEntity::ok)
-                .orElseThrow(() -> new ParticipantNotFoundException("Participant not found with UUID: " + uuid));
+        ParticipantDTO participantDTO = participantService.getParticipantByUuid(uuid);
+        return ResponseEntity.ok(participantDTO);
     }
 
     @PostMapping

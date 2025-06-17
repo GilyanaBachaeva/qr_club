@@ -34,7 +34,4 @@ public class ParticipantEntity {
 
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
-
-    @Column(name = "uuid", nullable = false, unique = true)
-    private UUID uuid;
 }
