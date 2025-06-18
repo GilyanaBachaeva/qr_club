@@ -14,8 +14,7 @@ import java.util.UUID;
 @RequestMapping("/api/qrcode")
 public class QrCodeController {
 
-    @Autowired
-    private ParticipantService participantService;
+    final ParticipantService participantService;
 
     @GetMapping("/{uuid}")
     public ResponseEntity<ParticipantUuidEntity> checkQrCode(@PathVariable UUID uuid) {

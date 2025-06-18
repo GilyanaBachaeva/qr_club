@@ -15,7 +15,6 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class ParticipantService {
 
     private final ParticipantRepository participantRepository;
@@ -32,6 +31,7 @@ public class ParticipantService {
         return participantMapper.toDTO(participantEntity);
     }
 
+    @Transactional
     public ParticipantUuidEntity checkQrCode(UUID uuid) {
         ParticipantUuidEntity participantUuidEntity = participantUuidRepository.findByUuid(uuid);
         if (participantUuidEntity == null) {
@@ -42,6 +42,7 @@ public class ParticipantService {
         return participantUuidEntity;
     }
 
+    @Transactional
     public ParticipantDTO save(ParticipantDTO participantDTO) {
         ParticipantEntity participantEntity = participantMapper.toEntity(participantDTO);
         ParticipantEntity savedParticipantEntity = participantRepository.save(participantEntity);
