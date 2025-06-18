@@ -2,7 +2,6 @@ package org.example.com.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.example.com.dto.ParticipantDTO;
-import org.example.com.exception.ParticipantNotFoundException;
 import org.example.com.service.ParticipantService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

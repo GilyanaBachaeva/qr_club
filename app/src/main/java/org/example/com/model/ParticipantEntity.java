@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import java.util.UUID;
 
 @Entity
 @Table(name = "participants")
@@ -34,4 +33,5 @@ public class ParticipantEntity {
 
     @Column(name = "birth_date", nullable = false)
     private LocalDate birthDate;
+
 }

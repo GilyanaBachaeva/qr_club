@@ -7,5 +7,4 @@ import java.util.UUID;
 
 public interface ParticipantUuidRepository extends JpaRepository<ParticipantUuidEntity, Long> {
     ParticipantUuidEntity findByUuid(UUID uuid);
-    boolean existsByUuid(UUID uuid);
 }

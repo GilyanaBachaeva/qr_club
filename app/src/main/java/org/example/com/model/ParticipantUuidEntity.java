@@ -27,8 +27,8 @@ public class ParticipantUuidEntity {
     @Column(name = "expiration_time")
     private LocalDateTime expirationTime;
 
-    @ManyToOne
-    @JoinColumn(name = "participant_id", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "participant_id", nullable = false, unique = true)
 
     private ParticipantEntity participant;
 }
