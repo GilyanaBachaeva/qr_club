@@ -1,9 +1,8 @@
 package org.example.com.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.com.model.ParticipantUuidEntity;
+import org.example.com.dto.ParticipantDTO;
 import org.example.com.service.ParticipantService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,8 +16,8 @@ public class QrCodeController {
     final ParticipantService participantService;
 
     @GetMapping("/{uuid}")
-    public ResponseEntity<ParticipantUuidEntity> checkQrCode(@PathVariable UUID uuid) {
-        ParticipantUuidEntity participant = participantService.checkQrCode(uuid);
+    public ResponseEntity<ParticipantDTO> checkQrCode(@PathVariable UUID uuid) {
+        ParticipantDTO participant = participantService.checkQrCode(uuid);
         return ResponseEntity.ok(participant);
     }
 }

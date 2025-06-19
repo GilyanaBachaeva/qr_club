@@ -31,15 +31,13 @@ public class ParticipantService {
         return participantMapper.toDTO(participantEntity);
     }
 
-    @Transactional
-    public ParticipantUuidEntity checkQrCode(UUID uuid) {
+    public ParticipantDTO checkQrCode(UUID uuid) {
         ParticipantUuidEntity participantUuidEntity = participantUuidRepository.findByUuid(uuid);
         if (participantUuidEntity == null) {
             throw new ParticipantNotFoundException("Participant not found with UUID: " + uuid);
         }
-
         regenerateUuid(participantUuidEntity);
-        return participantUuidEntity;
+        return participantMapper.toDTO(participantUuidEntity);
     }
 
     @Transactional
