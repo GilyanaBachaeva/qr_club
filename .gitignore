@@ -5,3 +5,5 @@
 build
 .idea/vcs.xml
 /.idea
+# Игнорировать файл конфигурации с конфиденциальными данными
+application-local.properties
